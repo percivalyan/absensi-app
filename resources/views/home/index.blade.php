@@ -1,57 +1,177 @@
 @extends('layouts.home')
 
 @section('content')
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card shadow-sm mb-2">
-                <div class="card-header">
-                    Daftar Absensi Hari Ini
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        @foreach ($attendances as $attendance)
-                        <a href="{{ route('home.show', $attendance->id) }}"
-                            class="list-group-item d-flex justify-content-between align-items-start py-3">
-                            <div class="ms-2 me-auto">
-                                <div class="fw-bold">{{ $attendance->title }}</div>
-                                <p class="mb-0">{{ $attendance->description }}</p>
-                            </div>
-                            @include('partials.attendance-badges')
-                        </a>
-                        @endforeach
-                    </ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('navbar_1');
+            if (navbar) {
+                navbar.style.display = 'none';
+            }
+
+            // Element references
+            const laporanAbsensiBtn = document.getElementById('laporanAbsensiBtn');
+            const mainContent = document.getElementById('mainContent');
+            const absensiContent = document.getElementById('absensiContent');
+
+            // Handle button click
+            laporanAbsensiBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                mainContent.style.display = 'none';
+                absensiContent.style.display = 'block';
+            });
+
+            // Back button functionality
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    absensiContent.style.display = 'none';
+                    mainContent.style.display = 'block';
+                });
+            }
+        });
+    </script>
+
+    <div class="container py-5" id="mainContent">
+        <!-- Header Section -->
+        <div class="mb-5">
+            <h1 class="fw-bold text-primary">E-Absensi</h1>
+            <div class="d-flex align-items-center text-muted">
+                <i class="fas fa-user-circle me-3 fs-2 text-dark"></i>
+                <div>
+                    <p class="mb-0 fw-semibold text-dark">{{ auth()->user()->name }}</p>
+                    <p class="mb-0">{{ auth()->user()->email }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    Informasi Karyawan
-                </div>
-                <div class="card-body">
-                    <ul class="ps-3">
-                        <li class="mb-1">
-                            <span class="fw-bold d-block">Nama : </span>
-                            <span>{{ auth()->user()->name }}</span>
+
+        <!-- Overview Text -->
+        <p class="fw-semibold text-muted mb-4">Overview</p>
+
+        <style>
+            .icon-lg {
+                width: 40px;
+                height: 40px;
+            }
+        </style>
+        <!-- Buttons Section -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="{{ route('presensi.index') }}"
+                    class="btn btn-lg btn-success w-100 py-3 fw-bold shadow-sm hover-shadow" aria-label="Laporan Absensi">
+                    <!-- Ikon laporan absensi -->
+                    <span data-feather="file-text" class="align-text-bottom icon-lg"></span>
+                    <br>
+                    LAPORAN ABSENSI
+                </a>
+            </div>
+            {{-- <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a href="#" class="btn btn-lg btn-warning w-100 py-3 fw-bold shadow-sm hover-shadow">
+                    <!-- Ikon manajemen penilaian -->
+                    <span data-feather="bar-chart" class="align-text-bottom icon-lg"></span> <br>
+                    MANAJEMEN PENILAIAN
+                </a>
+            </div> --}}
+
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <a class="btn btn-lg btn-secondary w-100 py-3 fw-bold shadow-sm hover-shadow {{ request()->routeIs('permissions.*') ? 'active' : '' }}"
+                    href="{{ route('subject_user.index2') }}">
+                    <!-- Ikon penugasan guru -->
+                    <span data-feather="users" class="align-text-bottom icon-lg"></span> <br>
+                    PENUGASAN GURU
+                </a>
+            </div>
+        </div>
+
+        <!-- Inisialisasi Feather Icons -->
+        <script>
+            feather.replace();
+        </script>
+
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed-bottom bg-white d-flex justify-content-around border-top py-3">
+        <a href="{{ url('/') }}" class="text-decoration-none text-center">
+            <i class="fas fa-home" style="font-size: 28px; color: #007bff;"></i>
+            <p class="small m-0">Beranda</p>
+        </a>
+        <a href="{{ url('notification') }}" class="text-decoration-none text-center">
+            <i class="fas fa-bell" style="font-size: 28px; color: #6c757d;"></i>
+            <p class="small m-0">Notifikasi</p>
+        </a>
+        <a href="{{ url('/home/account') }}" class="text-decoration-none text-center">
+            <i class="fas fa-user-cog" style="font-size: 28px; color: #6c757d;"></i>
+            <p class="small m-0">Profil</p>
+        </a>
+    </div>
+    </div>
+
+    <!-- Absensi Content -->
+    <div class="container py-5" id="absensiContent" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-md bg-white navbar-dark py-3">
+            <div class="container">
+                <a href="{{ url('/') }}">
+                    <button id="backButton" class="btn btn-outline-primary btn-sm ms-3" style="margin-top: 10px;">
+                        <i class="fa fa-arrow-left"></i> Back
+                    </button>
+                </a>
+
+                <a class="navbar-brand bg-transparent fw-bold" href="{{ route('home.index') }}">Absensi App</a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+                    <ul class="navbar-nav align-items-md-center gap-md-4 py-2 py-md-0">
+                        <li class="nav-item px-4 py-1 px-md-0 py-md-0">
+                            <a class="nav-link {{ request()->routeIs('home.*') ? 'active fw-bold' : '' }}"
+                                aria-current="page" href="{{ route('home.index') }}">Beranda</a>
                         </li>
-                        <li class="mb-1">
-                            <span class="fw-bold d-block">Email : </span>
-                            <a href="mailto:{{ auth()->user()->email }}">{{ auth()->user()->email }}</a>
-                        </li>
-                        <li class="mb-1">
-                            <span class="fw-bold d-block">No. Telp : </span>
-                            <a href="tel:{{ auth()->user()->phone }}">{{ auth()->user()->phone }}</a>
-                        </li>
-                        <li class="mb-1">
-                            <span class="fw-bold d-block">Bergabung Pada : </span>
-                            <span>{{ auth()->user()->created_at->diffForHumans() }} ({{
-                                auth()->user()->created_at->format('d M Y') }})</span>
+                        <li class="nav-item px-4 py-1 px-md-0 py-md-0">
+                            <form action="{{ route('auth.logout') }}" method="post">
+                                @method('DELETE')
+                                @csrf
+                                <button class="btn fw-bold btn-danger w-100">Keluar</button>
+                            </form>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Absensi List -->
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Daftar Absensi Hari Ini</h5>
+                    <form action="{{ route('attendances.index') }}" method="GET" class="d-flex">
+                        <input type="text" name="search" class="form-control me-2" placeholder="Cari Absensi..."
+                            value="{{ request('search') }}">
+                        <button class="btn btn-light" type="submit">Cari</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    @if ($attendances->isEmpty())
+                        <p class="text-muted text-center">Tidak ada data absensi yang ditemukan.</p>
+                    @else
+                        <div class="list-group">
+                            @foreach ($attendances as $attendance)
+                                <a href="{{ route('home.show', $attendance->id) }}"
+                                    class="list-group-item d-flex justify-content-between align-items-center py-3 border-0 rounded-3 mb-3 shadow-sm">
+                                    <div class="ms-2 me-auto">
+                                        <h6 class="fw-bold text-dark mb-1">{{ $attendance->title }}</h6>
+                                        <p class="text-muted mb-0">{{ Str::limit($attendance->description, 100) }}</p>
+                                    </div>
+                                    @include('partials.attendance-badges')
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
