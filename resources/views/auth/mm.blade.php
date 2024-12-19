@@ -176,35 +176,24 @@
 
         <section id="landings">
             {{-- <nav class="navbar" style="margin-top: 1000px"> --}}
-            <nav class="navbar" style="margin-top: 540px">
+            <nav class="navbar" style="margin-top: 850px">
                 <a href="{{ url('/') }}" class="navbar-brand" id="home-link">Home</a>
                 {{-- <a href="#" class="navbar-brand" id="visi-link">Visi & Misi</a> --}}
                 <a href="#" class="navbar-brand" id="login-link">Login</a>
             </nav>
-            
-<style>
-@media (min-width: 1024px) { /* Gaya ini hanya berlaku untuk layar desktop */
-    .landings .navbar {
-        margin-top: 200px !important;
-    }
-}
-</style>
 
-
-
-          
-              <div style="margin-top: 55px"></div>
+            <div style="margin-top: 40px"></div>
             <!-- Hero Section -->
             <section>
                 <div class="hero-section d-flex align-items-center"
                     style="background-color: #f8f9fa; height: 100vh; position: relative;">
                     <div class="container-fluid d-flex flex-column flex-lg-row justify-content-between align-items-center">
                         <div class="text-container" style="flex: 1; padding: 20px;">
-                             <!--<div style="margin-top: 50px"></div>-->
-                            <p class="display-4 font-weight-bold mb-2"
-                                style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); color: #6c757d; font-size: 32px">
+                            <br>
+                            <h2 class="display-4 font-weight-bold mb-4"
+                                style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); color: #6c757d;">
                                 Sistem Absensi Guru SMP Islam Nurush Shodiqin
-                            </p>
+                            </h2>
                             <p class="lead text-dark" style="text-align: justify;">
                                 SMP Islam Nurush Shodiqin, didirikan pada tahun 2000 di Kabupaten Bogor, adalah institusi
                                 pendidikan yang mengedepankan integrasi antara ilmu pengetahuan umum dan nilai-nilai
@@ -219,7 +208,7 @@
                             </button>
                         </div>
                         <div class="image-container"
-                            style="flex: 1; display: flex; justify-content: center; padding: 15px;">
+                            style="flex: 1; display: flex; justify-content: center; padding: 20px;">
                             <img src="{{ asset('img/hero_yns.jpg') }}" alt="Hero Image" class="img-fluid rounded"
                                 style="max-width: 100%; height: auto;">
                         </div>
